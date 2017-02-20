@@ -36,6 +36,13 @@ function plugin (options) {
     })
     .then((fileMaps) => {
       fileMaps.forEach(map => {
+        // Remove original files if a parent file name exists
+        Object.keys(map)
+          .map(k => map[k]._parentFileName)
+          .filter(parent => parent)
+          .reduce((parents, parent) => parents.add(parent), new Set())
+          .forEach(k => delete files[k]);
+
         Object.assign(files, map)
       })
 
